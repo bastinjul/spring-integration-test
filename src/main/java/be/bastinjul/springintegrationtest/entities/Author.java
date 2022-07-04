@@ -1,16 +1,30 @@
 package be.bastinjul.springintegrationtest.entities;
 
+import javax.persistence.*;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Set;
 
+@Entity
+@Table(name = "author")
 public class Author {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
     private String firstname;
+
+    @Column(nullable = false)
     private String lastname;
+
+    @Column(nullable = false, name = "birth_date")
     private Calendar birthDate;
 
-    private Set<Long> booksIds;
-
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "book_author",
+        joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"),
+        inverseJoinColumns = @JoinColumn(name = "author_id", referencedColumnName = "id"))
     private Set<Book> books;
 
     public Author() {
@@ -47,14 +61,6 @@ public class Author {
 
     public void setBirthDate(Calendar birthDate) {
         this.birthDate = birthDate;
-    }
-
-    public Set<Long> getBooksIds() {
-        return booksIds;
-    }
-
-    public void setBooksIds(Set<Long> booksIds) {
-        this.booksIds = booksIds;
     }
 
     public Set<Book> getBooks() {

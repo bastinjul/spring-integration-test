@@ -9,3 +9,17 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8082:8080"
+    environment:
+      DB_URL: jdbc:postgresql://integration-db:5432/integration-test
+      DB_USER: postgres
+      DB_PWD: postgres
+
+  integration-db:
+    container_name: "integration-db"
+    image: postgres:14-alpine
+    restart: always
+    environment:
+      POSTGRES_DB: integration-test
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5434:5432"
