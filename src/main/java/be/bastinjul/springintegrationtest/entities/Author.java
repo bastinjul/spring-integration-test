@@ -1,30 +1,38 @@
 package be.bastinjul.springintegrationtest.entities;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import org.springframework.hateoas.RepresentationModel;
+
 import javax.persistence.*;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name = "author")
-public class Author {
+@Schema
+public class Author extends RepresentationModel<Author> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private Long id;
 
     @Column(nullable = false)
+    @Schema
     private String firstname;
 
     @Column(nullable = false)
+    @Schema
     private String lastname;
 
     @Column(nullable = false, name = "birth_date")
+    @Schema
     private Calendar birthDate;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "book_author",
         joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"),
         inverseJoinColumns = @JoinColumn(name = "author_id", referencedColumnName = "id"))
+    @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private Set<Book> books;
 
     public Author() {
